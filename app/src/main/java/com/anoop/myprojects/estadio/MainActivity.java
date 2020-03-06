@@ -1,6 +1,7 @@
 package com.anoop.myprojects.estadio;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -9,6 +10,7 @@ import com.google.android.material.snackbar.Snackbar;
 import android.view.View;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.graphics.drawable.DrawerArrowDrawable;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -44,11 +46,16 @@ public class MainActivity extends AppCompatActivity {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
 
-        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this,drawer, toolbar,R.string.app_name, R.string.app_name);
-        mDrawerToggle.getDrawerArrowDrawable().setColor(Color.BLACK);
-        //mDrawerToggle.setDrawerArrowDrawable(getResources().getDrawable().);
-        drawer.addDrawerListener(mDrawerToggle);
-        mDrawerToggle.syncState();
+//        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this,drawer, toolbar,R.string.app_name, R.string.app_name);
+//
+//        mDrawerToggle.getDrawerArrowDrawable().setColor(Color.BLACK);
+////        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+////            Drawable drawable = getDrawable(R.drawable.ic_menu_black_24dp);
+////            mDrawerToggle.setDrawerArrowDrawable((DrawerArrowDrawable) drawable);
+////        }
+//        //mDrawerToggle.setDrawerArrowDrawable(getResources().getDrawable().);
+//        drawer.addDrawerListener(mDrawerToggle);
+//        mDrawerToggle.syncState();
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(

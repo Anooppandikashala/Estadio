@@ -1,9 +1,11 @@
 package com.anoop.myprojects.estadio.ui.tools;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -12,11 +14,14 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.anoop.myprojects.estadio.AddTurf;
 import com.anoop.myprojects.estadio.R;
 
 public class ToolsFragment extends Fragment {
 
     private ToolsViewModel toolsViewModel;
+
+    ImageView addTurf;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -30,6 +35,16 @@ public class ToolsFragment extends Fragment {
 //                textView.setText(s);
 //            }
 //        });
+
+        addTurf = root.findViewById(R.id.editTurfs);
+
+        addTurf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AddTurf.class);
+                getActivity().startActivity(intent);
+            }
+        });
         return root;
     }
 }
