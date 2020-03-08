@@ -8,17 +8,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anoop.myprojects.estadio.CustomAdapter;
-import com.anoop.myprojects.estadio.DataModel;
+import com.anoop.myprojects.estadio.DataModels.TurfModel;
 import com.anoop.myprojects.estadio.DatabaseHelper;
 import com.anoop.myprojects.estadio.R;
 
@@ -32,7 +30,7 @@ public class HomeFragment extends Fragment {
     private static RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private static RecyclerView recyclerView;
-    private static ArrayList<DataModel> data;
+    private static ArrayList<TurfModel> data;
     public static View.OnClickListener myOnClickListener;
     private static ArrayList<Integer> removedItems;
 
@@ -54,12 +52,12 @@ public class HomeFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        data = new ArrayList<DataModel>();
+        data = new ArrayList<TurfModel>();
 
         DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
 
         data = databaseHelper.getAllTurfs();
-        data.add(new DataModel(
+        data.add(new TurfModel(
                 "Turf",
                 "dhjvskdjhgdshdsvd dsvkjdsvdhds",
                 1,

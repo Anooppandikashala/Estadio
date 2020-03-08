@@ -4,15 +4,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.anoop.myprojects.estadio.DataModels.TurfModel;
 import com.anoop.myprojects.estadio.ui.home.HomeFragment;
 
 import java.util.ArrayList;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
-    private ArrayList<DataModel> dataSet;
+    private ArrayList<TurfModel> dataSet;
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView textViewName;
         TextView textViewVersion;
@@ -26,7 +26,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             //this.imageViewIcon = (ImageView) itemView.findViewById(R.id.imageView);
         }
     }
-    public CustomAdapter(ArrayList<DataModel> data) {
+    public CustomAdapter(ArrayList<TurfModel> data) {
         this.dataSet = data;
     }
     @Override

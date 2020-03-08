@@ -5,7 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
+
+import com.anoop.myprojects.estadio.DataModels.TurfModel;
+import com.anoop.myprojects.estadio.DataModels.UserModel;
 
 import java.util.ArrayList;
 
@@ -17,6 +19,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static String DATABASE_NAME = "turf_database";
     private static final int DATABASE_VERSION = 1;
     private static final String TABLE_TURF = "turfs";
+
+    private static final String TABLE_USER = "users";
+    private static final String TABLE_OWNER_USER = "owner_users";
 //    private static final String TABLE_USER_HOBBY = "users_hobby";
 //    private static final String TABLE_USER_CITY = "users_city";
 //    private static final String KEY_ID = "id";
@@ -32,6 +37,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "name TEXT ,"+
             "address TEXT ,"+
             "description TEXT ,"+
+            "phone TEXT );";
+
+    private static final String CREATE_TABLE_USER = "CREATE TABLE "
+            + TABLE_USER +
+            "(id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "name TEXT ,"+
+            "address TEXT ,"+
+            "email TEXT NOT NULL UNIQUE ,"+
+            "username TEXT NOT NULL UNIQUE ,"+
+            "password TEXT ,"+
+            "phone TEXT );";
+
+    private static final String CREATE_TABLE_OWNER_USER = "CREATE TABLE "
+            + TABLE_OWNER_USER +
+            "(id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "name TEXT ,"+
+            "address TEXT ,"+
+            "email TEXT NOT NULL UNIQUE ,"+
+            "username TEXT NOT NULL UNIQUE ,"+
+            "password TEXT ,"+
             "phone TEXT );";
 
 
@@ -54,6 +79,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_TURF);
+        db.execSQL(CREATE_TABLE_USER);
+        db.execSQL(CREATE_TABLE_OWNER_USER);
 //        db.execSQL(CREATE_TABLE_USER_HOBBY);
 //        db.execSQL(CREATE_TABLE_USER_CITY);
     }
@@ -61,12 +88,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS '" + TABLE_TURF + "'");
+        db.execSQL("DROP TABLE IF EXISTS '" + TABLE_USER + "'");
+        db.execSQL("DROP TABLE IF EXISTS '" + TABLE_OWNER_USER + "'");
 //        db.execSQL("DROP TABLE IF EXISTS '" + TABLE_USER_HOBBY + "'");
 //        db.execSQL("DROP TABLE IF EXISTS '" + TABLE_USER_CITY + "'");
         onCreate(db);
     }
 
-    public void addTurfs(String name, String address, String desc,String phone) {
+    public long addTurfs(String name, String address, String desc,String phone) {
         SQLiteDatabase db = this.getWritableDatabase();
         //adding user name in users table
         ContentValues values = new ContentValues();
@@ -76,6 +105,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("phone", phone);
         // db.insert(TABLE_USER, null, values);
         long id = db.insertWithOnConflict(TABLE_TURF, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+
+        return id;
+
+    }
+
+    public long addUser(String name, String address, String phone , String username, String password, String email,boolean isOwner) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        //adding user name in users table
+        ContentValues values = new ContentValues();
+        values.put("name", name);
+        values.put("address", address);
+        values.put("username", username);
+        values.put("password", password);
+        values.put("email", email);
+        values.put("phone", phone);
+        // db.insert(TABLE_USER, null, values);
+        long id;
+        if(isOwner)
+        {
+            id = db.insertWithOnConflict(TABLE_OWNER_USER, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+            return id;
+        }
+
+        id = db.insertWithOnConflict(TABLE_USER, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+        return id;
 
     }
 
@@ -96,8 +150,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    public ArrayList<DataModel> getAllTurfs() {
-        ArrayList<DataModel> userModelArrayList = new ArrayList<DataModel>();
+    public ArrayList<TurfModel> getAllTurfs() {
+        ArrayList<TurfModel> userModelArrayList = new ArrayList<TurfModel>();
 
         String selectQuery = "SELECT  * FROM " + TABLE_TURF;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -105,7 +159,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                DataModel userModel = new DataModel();
+                TurfModel userModel = new TurfModel();
                 userModel.setId_(c.getInt(c.getColumnIndex("id")));
                 userModel.setName(c.getString(c.getColumnIndex("name")));
                 userModel.setVersion(c.getString(c.getColumnIndex("description")));
@@ -116,6 +170,64 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return userModelArrayList;
     }
+
+    public UserModel getUser(int id,boolean isOwner) {
+        ArrayList<UserModel> userModelArrayList = new ArrayList<UserModel>();
+
+        String selectQuery;
+        if(isOwner)
+        {
+            selectQuery = "SELECT  * FROM " + TABLE_OWNER_USER +" WHERE id = " + String.valueOf(id);
+        }
+        else {
+            selectQuery = "SELECT  * FROM " + TABLE_USER +" WHERE id = " + String.valueOf(id);
+        }
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                UserModel userModel = new UserModel();
+                userModel.setId(c.getInt(c.getColumnIndex("id")));
+                userModel.setName(c.getString(c.getColumnIndex("name")));
+                userModel.setAddress(c.getString(c.getColumnIndex("address")));
+                userModel.setEmail(c.getString(c.getColumnIndex("email")));
+                userModel.setPhone(c.getString(c.getColumnIndex("phone")));
+
+
+                // adding to turfs list
+                userModelArrayList.add(userModel);
+            } while (c.moveToNext());
+        }
+        return userModelArrayList.get(0);
+    }
+
+    public int isValidUser(String username, String password,boolean isOwner) {
+        String selectQuery;
+        if(isOwner)
+        {
+            selectQuery = "SELECT  * FROM " + TABLE_OWNER_USER +
+                    " WHERE username like  '" +
+                    username + "' AND password like '" +
+                    password + "'";
+        }
+        else {
+            selectQuery = "SELECT  * FROM " + TABLE_USER +
+                    " WHERE username like  '" +
+                    username + "' AND password like '" +
+                    password + "'";
+        }
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+
+        if (c.moveToFirst()) {
+            return Integer.parseInt(c.getString(c.getColumnIndex("id")));
+        }
+        return -1;
+    }
+
 
 
 /*

@@ -1,15 +1,15 @@
-package com.anoop.myprojects.estadio;
+package com.anoop.myprojects.estadio.DataModels;
 
-public class DataModel {
+public class TurfModel {
     String name;
     String version;
     int id_;
     int image;
 
-    public DataModel()
+    public TurfModel()
     {}
 
-    public DataModel(String name, String version, int id_, int image) {
+    public TurfModel(String name, String version, int id_, int image) {
         this.name = name;
         this.version = version;
         this.id_ = id_;
