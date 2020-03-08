@@ -10,13 +10,14 @@
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:gravity="top"
+        android:layout_margin="20dp"
         android:layout_height="match_parent">
 
         <TextView
             android:layout_width="match_parent"
             android:text="Add Turf"
             android:layout_marginTop="20dp"
-            android:textSize="20sp"
+            android:textSize="25sp"
             android:textColor="#000000"
             android:textStyle="bold"
             android:gravity="center"
@@ -27,32 +28,51 @@
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:hint="Enter name"
+            android:layout_marginBottom="10dp"
             android:id="@+id/name"
+            android:background="@drawable/btn_back"
+            android:paddingLeft="10dp"
+            android:textColorHint="@color/colorAccent"
             android:layout_height="wrap_content"/>
 
         <EditText
             android:layout_width="match_parent"
             android:hint="Enter Address"
             android:id="@+id/address"
+            android:background="@drawable/btn_back"
+            android:paddingLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColorHint="@color/colorAccent"
             android:layout_height="wrap_content"/>
 
         <EditText
             android:layout_width="match_parent"
-            android:hint="Enter Desc"
+            android:hint="Enter Description"
+            android:background="@drawable/btn_back"
+            android:paddingLeft="10dp"
+            android:layout_marginBottom="10dp"
             android:id="@+id/desc"
+            android:textColorHint="@color/colorAccent"
             android:layout_height="wrap_content"/>
 
         <EditText
             android:layout_width="match_parent"
             android:hint="Enter Phone"
             android:id="@+id/phone"
+            android:background="@drawable/btn_back"
+            android:paddingLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColorHint="@color/colorAccent"
             android:layout_height="wrap_content"/>
 
         <Button
             android:layout_width="match_parent"
             android:id="@+id/addTurf"
-
-            android:onClick="addTurfs"
+            android:layout_marginTop="25dp"
+            style="@style/Widget.MaterialComponents.Button"
+            android:text="Add Turf"
+            android:textSize="20dp"
+            android:background="@drawable/btn_back"
             android:layout_height="wrap_content"/>
 
 

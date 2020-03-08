@@ -51,7 +51,8 @@ public class AddTurf extends AppCompatActivity {
         {
             databaseHelper = new DatabaseHelper(this);
             databaseHelper.addTurfs(Name,Address,Desc,Phone);
-            finish();
+            Toast.makeText(this,"Turf Added Successfully",Toast.LENGTH_SHORT).show();
+            super.onBackPressed();
         }
         else
         {
@@ -62,4 +63,6 @@ public class AddTurf extends AppCompatActivity {
 
 
     }
+
+
 }

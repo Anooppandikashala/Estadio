@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.anoop.myprojects.estadio.R;
+import com.anoop.myprojects.estadio.session_manager.Session;
 
 public class SendFragment extends Fragment {
 
@@ -32,4 +33,6 @@ public class SendFragment extends Fragment {
         });
         return root;
     }
+
+
 }

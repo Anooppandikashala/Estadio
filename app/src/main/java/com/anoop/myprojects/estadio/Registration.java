@@ -104,6 +104,7 @@ public class Registration extends AppCompatActivity {
         {
             if(checkPassword(strpassword,strconpassword))
             {
+                databaseHelper = new DatabaseHelper(this);
                 long id = databaseHelper.addUser(strname,straddress,strphone,strusername,strpassword,stremail,isowner);
                 if(id > 0)
                 {

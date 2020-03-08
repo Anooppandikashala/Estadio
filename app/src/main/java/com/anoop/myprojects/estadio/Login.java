@@ -12,11 +12,14 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.anoop.myprojects.estadio.DataModels.UserModel;
+import com.anoop.myprojects.estadio.session_manager.Session;
 
 public class Login extends AppCompatActivity {
 
     EditText username,password;
     String strusername,strpassword;
+
+    private Session session;
 
     private RadioGroup radioRegType;
     private RadioButton radioReg;
@@ -55,7 +58,9 @@ public class Login extends AppCompatActivity {
         signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 storeDetails();
+                doSignIn();
             }
         });
 
@@ -89,19 +94,47 @@ public class Login extends AppCompatActivity {
         if( !strusername.isEmpty() &&
             !strpassword.isEmpty())
         {
+            databaseHelper = new DatabaseHelper(this);
             int id = databaseHelper.isValidUser(strusername,strpassword,isowner);
+
+            String owner = isowner ? "player" : "owner";
 
             if(id != -1)
             {
+                session = new Session(this);
+                String idStr = String.valueOf(id);
+                session.setValues(strusername,idStr,owner);
+
                 Intent intent = new Intent(Login.this,MainActivity.class);
                 intent.putExtra("userId",id);
+                intent.putExtra("isowner",owner);
                 startActivity(intent);
                 finish();
+            }
+            else
+            {
+                Toast.makeText(this,"Login failed",Toast.LENGTH_SHORT).show();
             }
         }
         else
         {
             Toast.makeText(this,"Give valid details",Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    protected void onStart() {
+
+        Session session_ = new Session(this);
+        if(session_.isIsLogin())
+        {
+            Intent intent = new Intent(Login.this,MainActivity.class);
+            intent.putExtra("userId",session_.getId());
+            intent.putExtra("isowner",session_.getIsOwner());
+            startActivity(intent);
+            finish();
+        }
+
+        super.onStart();
     }
 }
