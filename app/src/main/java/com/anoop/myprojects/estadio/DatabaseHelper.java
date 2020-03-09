@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.anoop.myprojects.estadio.DataModels.TurfListItem;
 import com.anoop.myprojects.estadio.DataModels.TurfModel;
 import com.anoop.myprojects.estadio.DataModels.UserModel;
 
@@ -164,6 +165,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 userModel.setName(c.getString(c.getColumnIndex("name")));
                 userModel.setVersion(c.getString(c.getColumnIndex("description")));
 
+                // adding to turfs list
+                userModelArrayList.add(userModel);
+            } while (c.moveToNext());
+        }
+        return userModelArrayList;
+    }
+
+    public ArrayList<TurfListItem> getAllTurfsList() {
+        ArrayList<TurfListItem> userModelArrayList = new ArrayList<TurfListItem>();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_TURF;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                TurfListItem userModel = new TurfListItem();
+                userModel.setId(c.getInt(c.getColumnIndex("id")));
+                userModel.setTableId(c.getInt(c.getColumnIndex("id")));
+                userModel.setName(c.getString(c.getColumnIndex("name")));
+                userModel.setPhone(c.getString(c.getColumnIndex("phone")));
+                userModel.setView(R.drawable.ic_remove_red_eye_black_24dp);
+                userModel.setDelete(R.drawable.ic_delete_black_24dp);
                 // adding to turfs list
                 userModelArrayList.add(userModel);
             } while (c.moveToNext());

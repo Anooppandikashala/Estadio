@@ -55,9 +55,12 @@
                         android:layout_width="0dp"
                         android:layout_weight="0.8"
                         android:textColor="#303F9F"
+                        android:textStyle="bold"
                         android:id="@+id/booknow"
+                        android:background="@drawable/btn_back"
                         android:text="Book Now"
-                        android:layout_height="wrap_content"/>
+                        android:textSize="12sp"
+                        android:layout_height="30dp"/>
 
 
                 </LinearLayout>

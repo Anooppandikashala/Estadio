@@ -97,7 +97,7 @@ public class Login extends AppCompatActivity {
             databaseHelper = new DatabaseHelper(this);
             int id = databaseHelper.isValidUser(strusername,strpassword,isowner);
 
-            String owner = isowner ? "player" : "owner";
+            String owner = isowner ? "owner" : "player";
 
             if(id != -1)
             {

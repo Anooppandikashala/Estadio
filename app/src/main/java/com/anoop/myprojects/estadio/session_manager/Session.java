@@ -15,10 +15,10 @@ public class Session {
     }
 
     public void setValues(String usename,String id,String isOwner) {
-        prefs.edit().putString("username", usename).apply();
-        prefs.edit().putString("id", id).apply();
-        prefs.edit().putString("isowner", isOwner).apply();
-        prefs.edit().putString("islogin", "true").apply();
+        prefs.edit().putString("username", usename).commit();
+        prefs.edit().putString("id", id).commit();
+        prefs.edit().putString("isowner", isOwner).commit();
+        prefs.edit().putString("islogin", "true").commit();
 
     }
 
@@ -45,7 +45,7 @@ public class Session {
 
     public void logOut()
     {
-        prefs.edit().putString("islogin", "false").apply();
+        prefs.edit().putString("islogin", "false").commit();
     }
 
     public String getIsOwner() {
