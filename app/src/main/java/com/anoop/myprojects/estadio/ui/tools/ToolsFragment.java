@@ -99,6 +99,8 @@ public class ToolsFragment extends Fragment {
         DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
 
         data = databaseHelper.getAllTurfsList();
+
+//        System.out.println(data.get(0).toString());
 //        data.add(new TurfModel(
 //                "Turf",
 //                "dhjvskdjhgdshdsvd dsvkjdsvdhds",

@@ -23,7 +23,7 @@ public class AddTurf extends AppCompatActivity {
         name = findViewById(R.id.name);
         address = findViewById(R.id.address);
         desc = findViewById(R.id.desc);
-        phone = findViewById(R.id.name);
+        phone = findViewById(R.id.phone);
 
         btn = findViewById(R.id.addTurf);
 

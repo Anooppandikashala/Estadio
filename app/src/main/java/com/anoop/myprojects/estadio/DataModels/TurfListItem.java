@@ -68,4 +68,16 @@ public class TurfListItem {
     public void setTableId(int tableId) {
         this.tableId = tableId;
     }
+
+    @Override
+    public String toString() {
+        return "TurfListItem{" +
+                "id=" + id +
+                ", tableId=" + tableId +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", view=" + view +
+                ", delete=" + delete +
+                '}';
+    }
 }

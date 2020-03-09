@@ -185,13 +185,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 userModel.setId(c.getInt(c.getColumnIndex("id")));
                 userModel.setTableId(c.getInt(c.getColumnIndex("id")));
                 userModel.setName(c.getString(c.getColumnIndex("name")));
+
+                System.out.println(c.getColumnName(0));
+                System.out.println(c.getColumnName(1));
+                System.out.println(c.getColumnName(2));
+                System.out.println(c.getColumnName(3));
+                System.out.println(c.getColumnName(4));
+
+
+
                 userModel.setPhone(c.getString(c.getColumnIndex("phone")));
                 userModel.setView(R.drawable.ic_remove_red_eye_black_24dp);
                 userModel.setDelete(R.drawable.ic_delete_black_24dp);
                 // adding to turfs list
                 userModelArrayList.add(userModel);
+                System.out.println(userModel.toString());
             } while (c.moveToNext());
         }
+
         return userModelArrayList;
     }
 

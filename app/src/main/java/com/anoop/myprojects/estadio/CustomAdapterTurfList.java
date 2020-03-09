@@ -28,7 +28,7 @@ public class CustomAdapterTurfList extends RecyclerView.Adapter<CustomAdapterTur
             super(itemView);
             this.id = (TextView) itemView.findViewById(R.id.id);
             this.name = (TextView) itemView.findViewById(R.id.name);
-            this.phone = itemView.findViewById(R.id.phone);
+            this.phone = itemView.findViewById(R.id.mob);
             this.view = itemView.findViewById(R.id.view);
             this.delete = itemView.findViewById(R.id.delete);
             //this.imageViewIcon = (ImageView) itemView.findViewById(R.id.imageView);

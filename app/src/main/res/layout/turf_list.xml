@@ -41,7 +41,7 @@
                 android:layout_weight="1.2"
                 android:text="9876543210"
                 android:textStyle="bold"
-                android:id="@+id/phone"
+                android:id="@+id/mob"
                 android:paddingLeft="20dp"
                 android:textColor="#000000"
                 android:textSize="18sp"

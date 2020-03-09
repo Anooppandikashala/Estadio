@@ -1,6 +1,7 @@
 package com.anoop.myprojects.estadio.ui.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.anoop.myprojects.estadio.CustomAdapter;
 import com.anoop.myprojects.estadio.DataModels.TurfModel;
 import com.anoop.myprojects.estadio.DatabaseHelper;
 import com.anoop.myprojects.estadio.R;
+import com.anoop.myprojects.estadio.TurfBooking;
 
 import java.util.ArrayList;
 
@@ -83,6 +85,10 @@ public class HomeFragment extends Fragment {
             TextView disciplinaNome =(TextView)parentView.findViewById(R.id.textViewName);
             selectedName = disciplinaNome.getText().toString();
             Toast.makeText(context,selectedName,Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(context, TurfBooking.class);
+
+            context.startActivity(intent);
             //
         }
 //        private void removeItem(View v) {
