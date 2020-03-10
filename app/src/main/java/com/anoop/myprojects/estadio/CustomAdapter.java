@@ -17,12 +17,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         TextView textViewName;
         TextView textViewVersion;
         Button bookNow;
+        TextView id;
         //ImageView imageViewIcon;
         public MyViewHolder(View itemView) {
             super(itemView);
             this.textViewName = (TextView) itemView.findViewById(R.id.textViewName);
             this.textViewVersion = (TextView) itemView.findViewById(R.id.textViewVersion);
             this.bookNow = itemView.findViewById(R.id.booknow);
+            this.id = itemView.findViewById(R.id.turf_id);
             //this.imageViewIcon = (ImageView) itemView.findViewById(R.id.imageView);
         }
     }
@@ -46,6 +48,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         //ImageView imageView = holder.imageViewIcon;
         textViewName.setText(dataSet.get(listPosition).getName());
         textViewVersion.setText(dataSet.get(listPosition).getVersion());
+
+        TextView id = holder.id;
+        id.setText(String.valueOf(dataSet.get(listPosition).getId()));
         Button bookNow = holder.bookNow;
         bookNow.setOnClickListener(HomeFragment.myOnClickListener);
         //imageView.setImageResource(dataSet.get(listPosition).getImage());

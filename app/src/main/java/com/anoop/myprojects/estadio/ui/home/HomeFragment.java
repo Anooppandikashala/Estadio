@@ -20,7 +20,7 @@ import com.anoop.myprojects.estadio.CustomAdapter;
 import com.anoop.myprojects.estadio.DataModels.TurfModel;
 import com.anoop.myprojects.estadio.DatabaseHelper;
 import com.anoop.myprojects.estadio.R;
-import com.anoop.myprojects.estadio.TurfBooking;
+import com.anoop.myprojects.estadio.TurfBookings;
 
 import java.util.ArrayList;
 
@@ -59,12 +59,12 @@ public class HomeFragment extends Fragment {
         DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
 
         data = databaseHelper.getAllTurfs();
-        data.add(new TurfModel(
-                "Turf",
-                "dhjvskdjhgdshdsvd dsvkjdsvdhds",
-                1,
-                123
-        ));
+//        data.add(new TurfModel(
+//                "Turf",
+//                "dhjvskdjhgdshdsvd dsvkjdsvdhds",
+//                1,
+//                123
+//        ));
 
         removedItems = new ArrayList<Integer>();
         adapter = new CustomAdapter(data);
@@ -83,10 +83,18 @@ public class HomeFragment extends Fragment {
 
             ViewGroup parentView = (ViewGroup)v.getParent();
             TextView disciplinaNome =(TextView)parentView.findViewById(R.id.textViewName);
+            TextView id_ = parentView.findViewById(R.id.turf_id);
+
             selectedName = disciplinaNome.getText().toString();
             Toast.makeText(context,selectedName,Toast.LENGTH_SHORT).show();
 
-            Intent intent = new Intent(context, TurfBooking.class);
+            Intent intent = new Intent(context, TurfBookings.class);
+
+            intent.putExtra("ID",id_.getText().toString());
+
+            System.out.println(id_.getText());
+
+            intent.putExtra("NAME",selectedName);
 
             context.startActivity(intent);
             //

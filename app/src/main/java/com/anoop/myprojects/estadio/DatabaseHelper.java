@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.anoop.myprojects.estadio.DataModels.TurfBookingModel;
 import com.anoop.myprojects.estadio.DataModels.TurfListItem;
 import com.anoop.myprojects.estadio.DataModels.TurfModel;
 import com.anoop.myprojects.estadio.DataModels.UserModel;
@@ -23,6 +24,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String TABLE_USER = "users";
     private static final String TABLE_OWNER_USER = "owner_users";
+    private static final String TABLE_TURF_BOOKING = "turf_bookings";
+
 //    private static final String TABLE_USER_HOBBY = "users_hobby";
 //    private static final String TABLE_USER_CITY = "users_city";
 //    private static final String KEY_ID = "id";
@@ -36,6 +39,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + TABLE_TURF +
             "(id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "name TEXT ,"+
+            "owner_id INTEGER ,"+
             "address TEXT ,"+
             "description TEXT ,"+
             "phone TEXT );";
@@ -60,6 +64,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "password TEXT ,"+
             "phone TEXT );";
 
+    private static final String CREATE_TABLE_TURF_BOOKING = "CREATE TABLE "
+            + TABLE_TURF_BOOKING +
+            "(id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "user_id INTEGER , "+
+            "turf_id INTEGER , "+
+            "approve INTEGER , "+
+            "owner_id INTEGER ,"+
+            "date_ TEXT NOT NULL,"+
+            "time_from TEXT NOT NULL,"+
+            "time_to TEXT NOT NULL );";
+
 
 //    private static final String CREATE_TABLE_STUDENTS = "CREATE TABLE "
 //            + TABLE_USER + "(" + KEY_ID
@@ -82,6 +97,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_TURF);
         db.execSQL(CREATE_TABLE_USER);
         db.execSQL(CREATE_TABLE_OWNER_USER);
+        db.execSQL(CREATE_TABLE_TURF_BOOKING);
 //        db.execSQL(CREATE_TABLE_USER_HOBBY);
 //        db.execSQL(CREATE_TABLE_USER_CITY);
     }
@@ -91,17 +107,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS '" + TABLE_TURF + "'");
         db.execSQL("DROP TABLE IF EXISTS '" + TABLE_USER + "'");
         db.execSQL("DROP TABLE IF EXISTS '" + TABLE_OWNER_USER + "'");
+        db.execSQL("DROP TABLE IF EXISTS '" + TABLE_TURF_BOOKING + "'");
 //        db.execSQL("DROP TABLE IF EXISTS '" + TABLE_USER_HOBBY + "'");
 //        db.execSQL("DROP TABLE IF EXISTS '" + TABLE_USER_CITY + "'");
         onCreate(db);
     }
 
-    public long addTurfs(String name, String address, String desc,String phone) {
+    public long addTurfs(String name, String address, String desc,String phone,int owner_id) {
         SQLiteDatabase db = this.getWritableDatabase();
         //adding user name in users table
         ContentValues values = new ContentValues();
         values.put("name", name);
         values.put("address", address);
+        values.put("owner_id", owner_id);
         values.put("description", desc);
         values.put("phone", phone);
         // db.insert(TABLE_USER, null, values);
@@ -110,6 +128,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
 
     }
+
+    public long addTurfBooking(TurfBookingModel turfBookingModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        //adding user name in users table
+        ContentValues values = new ContentValues();
+
+        values.put("turf_id", turfBookingModel.getTurf_id());
+        values.put("user_id",turfBookingModel.getUser_id());
+        values.put("date_",turfBookingModel.getDate());
+        values.put("owner_id",turfBookingModel.getOwner_id());
+        values.put("time_from",turfBookingModel.getTime_from());
+        values.put("time_to",turfBookingModel.getTime_to());
+        values.put("approve",0);
+
+        // db.insert(TABLE_USER, null, values);
+        long id = db.insertWithOnConflict(TABLE_TURF_BOOKING, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+
+        return id;
+
+    }
+
+    public long approveTurfBooking(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        //adding user name in users table
+        ContentValues values = new ContentValues();
+
+        values.put("approve",1);
+
+        // db.insert(TABLE_USER, null, values);
+        long id__ = db.updateWithOnConflict(TABLE_TURF_BOOKING,values,"id="+id,null,SQLiteDatabase.CONFLICT_IGNORE);
+
+        return id__;
+
+    }
+
 
     public long addUser(String name, String address, String phone , String username, String password, String email,boolean isOwner) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -147,7 +200,77 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //        db.insert(TABLE_USER_CITY, null, valuesCity);
 
 
+    public ArrayList<TurfBookingModel> getAllTurfBookingsForTurf(int turf_id) {
+        ArrayList<TurfBookingModel> userModelArrayList = new ArrayList<TurfBookingModel>();
 
+        String selectQuery = "SELECT  * FROM " + TABLE_TURF_BOOKING+ " WHERE turf_id = " + String.valueOf(turf_id);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                TurfBookingModel userModel = new TurfBookingModel();
+                userModel.setId(c.getInt(c.getColumnIndex("id")));
+                userModel.setDate(c.getString(c.getColumnIndex("date_")));
+                userModel.setTime_from(c.getString(c.getColumnIndex("time_from")));
+                userModel.setTime_to(c.getString(c.getColumnIndex("time_to")));
+                userModel.setTurf_id(c.getInt(c.getColumnIndex("turf_id")));
+                userModel.setUser_id(c.getInt(c.getColumnIndex("user_id")));
+                userModel.setOwner_id(c.getInt(c.getColumnIndex("owner_id")));
+                // adding to turfs list
+                userModelArrayList.add(userModel);
+            } while (c.moveToNext());
+        }
+        return userModelArrayList;
+    }
+
+    public ArrayList<TurfBookingModel> getAllTurfBookingsForOwner(int owner_id) {
+        ArrayList<TurfBookingModel> userModelArrayList = new ArrayList<TurfBookingModel>();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_TURF_BOOKING+ " WHERE owner_id = " + String.valueOf(owner_id);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                TurfBookingModel userModel = new TurfBookingModel();
+                userModel.setId(c.getInt(c.getColumnIndex("id")));
+                userModel.setDate(c.getString(c.getColumnIndex("date_")));
+                userModel.setTime_from(c.getString(c.getColumnIndex("time_from")));
+                userModel.setTime_to(c.getString(c.getColumnIndex("time_to")));
+                userModel.setTurf_id(c.getInt(c.getColumnIndex("turf_id")));
+                userModel.setUser_id(c.getInt(c.getColumnIndex("user_id")));
+                userModel.setOwner_id(c.getInt(c.getColumnIndex("owner_id")));
+                // adding to turfs list
+                userModelArrayList.add(userModel);
+            } while (c.moveToNext());
+        }
+        return userModelArrayList;
+    }
+
+    public ArrayList<TurfBookingModel> getAllTurfBookingsForUser(int user_id) {
+        ArrayList<TurfBookingModel> userModelArrayList = new ArrayList<TurfBookingModel>();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_TURF_BOOKING+ " WHERE user_id = " + String.valueOf(user_id);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                TurfBookingModel userModel = new TurfBookingModel();
+                userModel.setId(c.getInt(c.getColumnIndex("id")));
+                userModel.setDate(c.getString(c.getColumnIndex("date_")));
+                userModel.setTime_from(c.getString(c.getColumnIndex("time_from")));
+                userModel.setTime_to(c.getString(c.getColumnIndex("time_to")));
+                userModel.setTurf_id(c.getInt(c.getColumnIndex("turf_id")));
+                userModel.setUser_id(c.getInt(c.getColumnIndex("user_id")));
+                userModel.setOwner_id(c.getInt(c.getColumnIndex("owner_id")));
+                // adding to turfs list
+                userModelArrayList.add(userModel);
+            } while (c.moveToNext());
+        }
+        return userModelArrayList;
+    }
 
 
 
@@ -164,6 +287,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 userModel.setId_(c.getInt(c.getColumnIndex("id")));
                 userModel.setName(c.getString(c.getColumnIndex("name")));
                 userModel.setVersion(c.getString(c.getColumnIndex("description")));
+                userModel.setOwner_id(c.getInt(c.getColumnIndex("owner_id")));
 
                 // adding to turfs list
                 userModelArrayList.add(userModel);
@@ -185,15 +309,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 userModel.setId(c.getInt(c.getColumnIndex("id")));
                 userModel.setTableId(c.getInt(c.getColumnIndex("id")));
                 userModel.setName(c.getString(c.getColumnIndex("name")));
-
-                System.out.println(c.getColumnName(0));
-                System.out.println(c.getColumnName(1));
-                System.out.println(c.getColumnName(2));
-                System.out.println(c.getColumnName(3));
-                System.out.println(c.getColumnName(4));
-
-
-
                 userModel.setPhone(c.getString(c.getColumnIndex("phone")));
                 userModel.setView(R.drawable.ic_remove_red_eye_black_24dp);
                 userModel.setDelete(R.drawable.ic_delete_black_24dp);
@@ -230,6 +345,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 userModel.setEmail(c.getString(c.getColumnIndex("email")));
                 userModel.setPhone(c.getString(c.getColumnIndex("phone")));
 
+
+                // adding to turfs list
+                userModelArrayList.add(userModel);
+            } while (c.moveToNext());
+        }
+        return userModelArrayList.get(0);
+    }
+
+    public TurfModel getTurf(int id) {
+        ArrayList<TurfModel> userModelArrayList = new ArrayList<TurfModel>();
+
+        String selectQuery;
+        selectQuery = "SELECT  * FROM " + TABLE_TURF +" WHERE id = " + String.valueOf(id);
+
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                TurfModel userModel = new TurfModel();
+                userModel.setId_(c.getInt(c.getColumnIndex("id")));
+                userModel.setName(c.getString(c.getColumnIndex("name")));
+                userModel.setVersion(c.getString(c.getColumnIndex("description")));
 
                 // adding to turfs list
                 userModelArrayList.add(userModel);

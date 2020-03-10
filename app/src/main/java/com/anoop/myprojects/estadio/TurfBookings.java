@@ -1,26 +1,30 @@
 package com.anoop.myprojects.estadio;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
+import com.anoop.myprojects.estadio.DataModels.TurfBookingModel;
+import com.anoop.myprojects.estadio.session_manager.Session;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class TurfBooking extends AppCompatActivity {
+public class TurfBookings extends AppCompatActivity {
 
     EditText date,time_from,time_to;
 
@@ -30,12 +34,28 @@ public class TurfBooking extends AppCompatActivity {
 
     String day="",dayName="",year="",month="",monthNumber="";
 
+    int TURF_ID=0;
 
+
+    TextView name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_turf_booking);
 
+        Intent intent = getIntent();
+
+        String id__ = intent.getStringExtra("ID");
+        String name__ = intent.getStringExtra("NAME");
+
+        System.out.println(id__);
+
+        if(id__ != null)
+            TURF_ID= Integer.parseInt(id__);
+
+        name = findViewById(R.id.textViewName);
+
+        name.setText(name__);
 
         date = findViewById(R.id.date);
 
@@ -50,7 +70,7 @@ public class TurfBooking extends AppCompatActivity {
                 int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
                 int minute = mcurrentTime.get(Calendar.MINUTE);
                 TimePickerDialog mTimePicker;
-                mTimePicker = new TimePickerDialog(TurfBooking.this, new TimePickerDialog.OnTimeSetListener() {
+                mTimePicker = new TimePickerDialog(TurfBookings.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         time_from.setText( selectedHour + ":" + selectedMinute);
@@ -69,7 +89,7 @@ public class TurfBooking extends AppCompatActivity {
                 int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
                 int minute = mcurrentTime.get(Calendar.MINUTE);
                 TimePickerDialog mTimePicker;
-                mTimePicker = new TimePickerDialog(TurfBooking.this, new TimePickerDialog.OnTimeSetListener() {
+                mTimePicker = new TimePickerDialog(TurfBookings.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         time_to.setText( selectedHour + ":" + selectedMinute);
@@ -84,7 +104,7 @@ public class TurfBooking extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(TurfBooking.this,
+                DatePickerDialog datePickerDialog = new DatePickerDialog(TurfBookings.this,
                         new DatePickerDialog.OnDateSetListener() {
 
                             @Override
@@ -127,16 +147,19 @@ public class TurfBooking extends AppCompatActivity {
         book_now.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(TurfBooking.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(TurfBookings.this);
                 builder.setMessage("You want to Save ?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 // FIRE ZE MISSILES!
+                                doBooking();
+                                goBack();
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 // User cancelled the dialog
+
                             }
                         });
                 builder.setTitle("Are You Sure");
@@ -145,6 +168,43 @@ public class TurfBooking extends AppCompatActivity {
         });
 
     }
+
+    private void goBack() {
+
+        super.onBackPressed();
+    }
+
+    void  doBooking()
+    {
+        String date_ = date.getText().toString();
+        String time_from_ = time_from.getText().toString();
+        String time_to_ = time_to.getText().toString();
+
+        Session session = new Session(TurfBookings.this);
+
+        TurfBookingModel turfBookingModel = new TurfBookingModel();
+
+        turfBookingModel.setUser_id(Integer.parseInt(session.getId()));
+        turfBookingModel.setTurf_id(TURF_ID);
+        turfBookingModel.setDate(date_);
+        turfBookingModel.setTime_from(time_from_);
+        turfBookingModel.setTime_to(time_to_);
+
+        DatabaseHelper databaseHelper = new DatabaseHelper(TurfBookings.this);
+
+        long id = databaseHelper.addTurfBooking(turfBookingModel);
+
+        if(id > 0)
+        {
+            Toast.makeText(this,"Booked Successfully",Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Toast.makeText(this,"Booking Canceled",Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
 
     String getMonthName(int month)
     {
@@ -217,27 +277,27 @@ public class TurfBooking extends AppCompatActivity {
 
     }
 
-    public class AlertDialogFragment extends DialogFragment {
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the Builder class for convenient dialog construction
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage("You want to Save ?")
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // FIRE ZE MISSILES!
-                        }
-                    })
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // User cancelled the dialog
-                        }
-                    });
-            builder.setTitle("Are You Sure");
-            // Create the AlertDialog object and return it
-            return builder.create();
-        }
-    }
+//    public class AlertDialogFragment extends DialogFragment {
+//        @Override
+//        public Dialog onCreateDialog(Bundle savedInstanceState) {
+//            // Use the Builder class for convenient dialog construction
+//            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//            builder.setMessage("You want to Save ?")
+//                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface dialog, int id) {
+//                            // FIRE ZE MISSILES!
+//                        }
+//                    })
+//                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface dialog, int id) {
+//                            // User cancelled the dialog
+//                        }
+//                    });
+//            builder.setTitle("Are You Sure");
+//            // Create the AlertDialog object and return it
+//            return builder.create();
+//        }
+//    }
 
 
 }

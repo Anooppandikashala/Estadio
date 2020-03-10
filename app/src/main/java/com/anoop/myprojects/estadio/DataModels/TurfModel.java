@@ -5,15 +5,17 @@ public class TurfModel {
     String version;
     int id_;
     int image;
+    int owner_id;
 
     public TurfModel()
     {}
 
-    public TurfModel(String name, String version, int id_, int image) {
+    public TurfModel(String name, String version, int id_, int image, int owner_id) {
         this.name = name;
         this.version = version;
         this.id_ = id_;
         this.image=image;
+        this.owner_id = owner_id;
     }
     public String getName() {
         return name;
@@ -42,5 +44,13 @@ public class TurfModel {
 
     public void setImage(int image) {
         this.image = image;
+    }
+
+    public int getOwner_id() {
+        return owner_id;
+    }
+
+    public void setOwner_id(int owner_id) {
+        this.owner_id = owner_id;
     }
 }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
-    tools:context=".TurfBooking">
+    tools:context=".TurfBookings">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
