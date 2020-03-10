@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        String id = intent.getStringExtra("userId");
+        //String id = intent.getStringExtra("userId");
         String isowner = intent.getStringExtra("isowner");
 
 //        System.out.println(isowner);

@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.anoop.myprojects.estadio.session_manager.Session;
+
 public class AddTurf extends AppCompatActivity {
 
     EditText name,address,desc,phone;
@@ -47,10 +49,12 @@ public class AddTurf extends AppCompatActivity {
 
         String Phone = phone.getText().toString();
 
+        Session session= new Session(this);
+
         if(!Name.isEmpty() && !Address.isEmpty() && !Desc.isEmpty() && !Phone.isEmpty())
         {
             databaseHelper = new DatabaseHelper(this);
-            databaseHelper.addTurfs(Name,Address,Desc,Phone);
+            databaseHelper.addTurfs(Name,Address,Desc,Phone,Integer.parseInt(session.getId()));
             Toast.makeText(this,"Turf Added Successfully",Toast.LENGTH_SHORT).show();
             super.onBackPressed();
         }

@@ -125,7 +125,7 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onStart() {
 
-        Session session_ = new Session(this);
+        Session session_ = new Session(Login.this);
         if(session_.isIsLogin())
         {
             Intent intent = new Intent(Login.this,MainActivity.class);

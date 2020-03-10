@@ -17,10 +17,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anoop.myprojects.estadio.CustomAdapter;
+import com.anoop.myprojects.estadio.CustomAdapterBooking;
+import com.anoop.myprojects.estadio.DataModels.TurfBookingModel;
 import com.anoop.myprojects.estadio.DataModels.TurfModel;
 import com.anoop.myprojects.estadio.DatabaseHelper;
 import com.anoop.myprojects.estadio.R;
 import com.anoop.myprojects.estadio.TurfBookings;
+import com.anoop.myprojects.estadio.session_manager.Session;
 
 import java.util.ArrayList;
 
@@ -33,8 +36,12 @@ public class HomeFragment extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     private static RecyclerView recyclerView;
     private static ArrayList<TurfModel> data;
+    private static ArrayList<TurfBookingModel> data_booking;
     public static View.OnClickListener myOnClickListener;
+    public static View.OnClickListener myOnClickListenerApprove;
     private static ArrayList<Integer> removedItems;
+
+    int ID;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -48,6 +55,26 @@ public class HomeFragment extends Fragment {
 //                textView.setText(s);
 //            }
 //        });
+
+        Session session = new Session(getContext());
+
+        ID = Integer.parseInt(session.getId());
+
+        System.out.println(session.getId());
+        if(session.getIsOwner().equals("player"))
+        {
+            ifPlayer(root);
+        }
+        else
+        {
+            ifOwner(root);
+        }
+
+        return root;
+    }
+
+    void ifPlayer(View root)
+    {
         myOnClickListener = new MyOnClickListener(getContext());
         recyclerView = (RecyclerView) root.findViewById(R.id.my_recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -69,7 +96,39 @@ public class HomeFragment extends Fragment {
         removedItems = new ArrayList<Integer>();
         adapter = new CustomAdapter(data);
         recyclerView.setAdapter(adapter);
-        return root;
+    }
+
+    void ifOwner(View root)
+    {
+
+        System.out.println("Hi");
+        myOnClickListenerApprove = new MyOnClickListenerApprove(getContext());
+        recyclerView = (RecyclerView) root.findViewById(R.id.my_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        data_booking = new ArrayList<TurfBookingModel>();
+
+        DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
+
+        data_booking = databaseHelper.getAllTurfBookingsForOwner(ID);
+
+        data_booking = databaseHelper.getTurfBooking(5);
+
+        System.out.println("Owner id :"+data_booking.get(0).getOwner_id());
+//        data.add(new TurfModel(
+//                "Turf",
+//                "dhjvskdjhgdshdsvd dsvkjdsvdhds",
+//                1,
+//                123
+//        ));
+
+        //System.out.println(data_booking.get(0).toString());
+
+        removedItems = new ArrayList<Integer>();
+        adapter = new CustomAdapterBooking(data_booking,getContext());
+        recyclerView.setAdapter(adapter);
     }
 
     private static class MyOnClickListener implements View.OnClickListener {
@@ -116,5 +175,37 @@ public class HomeFragment extends Fragment {
 //            data.remove(selectedItemPosition);
 //            adapter.notifyItemRemoved(selectedItemPosition);
 //        }
+    }
+
+
+    private static class MyOnClickListenerApprove implements View.OnClickListener {
+        private final Context context;
+
+        private MyOnClickListenerApprove(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public void onClick(View v) {
+            String selectedName = "Hello";
+
+            ViewGroup parentView = (ViewGroup) v.getParent();
+            TextView disciplinaNome = (TextView) parentView.findViewById(R.id.textViewName);
+            TextView id_ = parentView.findViewById(R.id.turf_id);
+
+            selectedName = disciplinaNome.getText().toString();
+            Toast.makeText(context, selectedName, Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(context, TurfBookings.class);
+
+            intent.putExtra("ID", id_.getText().toString());
+
+            System.out.println(id_.getText());
+
+            intent.putExtra("NAME", selectedName);
+
+            context.startActivity(intent);
+            //
+        }
     }
 }

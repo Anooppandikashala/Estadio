@@ -17,6 +17,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.anoop.myprojects.estadio.DataModels.TurfBookingModel;
+import com.anoop.myprojects.estadio.DataModels.TurfModel;
 import com.anoop.myprojects.estadio.session_manager.Session;
 
 import java.text.ParseException;
@@ -50,8 +51,8 @@ public class TurfBookings extends AppCompatActivity {
 
         System.out.println(id__);
 
-        if(id__ != null)
-            TURF_ID= Integer.parseInt(id__);
+
+        TURF_ID= Integer.parseInt(id__);
 
         name = findViewById(R.id.textViewName);
 
@@ -192,7 +193,13 @@ public class TurfBookings extends AppCompatActivity {
 
         DatabaseHelper databaseHelper = new DatabaseHelper(TurfBookings.this);
 
+        TurfModel turfModel = databaseHelper.getTurf(TURF_ID);
+
+        turfBookingModel.setOwner_id(turfModel.getOwner_id());
+
         long id = databaseHelper.addTurfBooking(turfBookingModel);
+
+        System.out.println(id);
 
         if(id > 0)
         {

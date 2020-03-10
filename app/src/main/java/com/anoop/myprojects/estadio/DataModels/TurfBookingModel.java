@@ -75,6 +75,12 @@ public class TurfBookingModel {
         this.time_to = time_to;
     }
 
+    public String getTime()
+    {
+        String ret = time_from + " to " + time_to;
+        return ret;
+    }
+
     @Override
     public String toString() {
         return "TurfBookings{" +
