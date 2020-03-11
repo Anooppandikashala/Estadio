@@ -2,10 +2,12 @@ package com.anoop.myprojects.estadio.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +43,8 @@ public class HomeFragment extends Fragment {
     public static View.OnClickListener myOnClickListenerApprove;
     private static ArrayList<Integer> removedItems;
 
+    TextView title;
+
     int ID;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -57,6 +61,8 @@ public class HomeFragment extends Fragment {
 //        });
 
         Session session = new Session(getContext());
+
+        title = root.findViewById(R.id.title);
 
         ID = Integer.parseInt(session.getId());
 
@@ -75,6 +81,8 @@ public class HomeFragment extends Fragment {
 
     void ifPlayer(View root)
     {
+
+        title.setText("Turfs");
         myOnClickListener = new MyOnClickListener(getContext());
         recyclerView = (RecyclerView) root.findViewById(R.id.my_recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -108,7 +116,7 @@ public class HomeFragment extends Fragment {
 
     void ifOwner(View root)
     {
-
+        title.setText("Turf Bookings");
         System.out.println("Hi");
         myOnClickListenerApprove = new MyOnClickListenerApprove(getContext());
         recyclerView = (RecyclerView) root.findViewById(R.id.my_recycler_view);
@@ -207,6 +215,9 @@ public class HomeFragment extends Fragment {
 
             DatabaseHelper databaseHelper = new DatabaseHelper(context);
             databaseHelper.approveTurfBooking(turfBookingId);
+
+            Button button = v.findViewById(R.id.approve);
+            button.setTextColor(Color.GREEN);
 
             ArrayList<TurfBookingModel> turfBookingModel = databaseHelper.getTurfBooking(turfBookingId);
 

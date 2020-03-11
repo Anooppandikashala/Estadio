@@ -1,6 +1,7 @@
 package com.anoop.myprojects.estadio;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.anoop.myprojects.estadio.session_manager.Session;
+import com.anoop.myprojects.estadio.ui.tools.ToolsFragment;
 
 public class AddTurf extends AppCompatActivity {
 
@@ -38,6 +40,17 @@ public class AddTurf extends AppCompatActivity {
 
 
     }
+
+
+
+//    @Override
+//    public void navigateToUpdateFragment() {
+//        String fragmentTag = ToolsFragment.class.getSimpleName();
+//        ToolsFragment fragment = ToolsFragment.newInstance();
+//        FragmentTransaction localFragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        localFragmentTransaction.replace(R.id.nav_host_fragment, fragment, fragmentTag).addToBackStack(fragmentTag).commit();
+//
+//    }
 
     public void addTurfs() {
 

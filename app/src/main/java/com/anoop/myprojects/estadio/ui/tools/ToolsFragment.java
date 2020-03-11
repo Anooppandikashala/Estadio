@@ -43,13 +43,18 @@ public class ToolsFragment extends Fragment {
     public static View.OnClickListener viewOnClickListener,deleteOnClickListener;
     private static ArrayList<Integer> removedItems;
 
+//    private static final String ARG_PARAM1 = "param1";
+//    private static final String ARG_PARAM2 = "param2";
+
     ImageView addTurf;
+
+    View root_;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         toolsViewModel =
                 ViewModelProviders.of(this).get(ToolsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_tools, container, false);
+        root_ = inflater.inflate(R.layout.fragment_tools, container, false);
 //        final TextView textView = root.findViewById(R.id.text_tools);
 //        toolsViewModel.getText().observe(this, new Observer<String>() {
 //            @Override
@@ -58,8 +63,36 @@ public class ToolsFragment extends Fragment {
 //            }
 //        });
 
+        initFragment(root_);
+
+        return root_;
+    }
+
+//    public static HomeFragment newInstance(String param1, String param2) {
+//        HomeFragment fragment = new HomeFragment();
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
 
+    @Override
+    public void onStart() {
+
+        initFragment(root_);
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        initFragment(root_);
+        super.onResume();
+    }
+
+    public  void initFragment(View root)
+    {
         addTurf = root.findViewById(R.id.editTurfs);
 
         Session session = new Session(getContext());
@@ -98,7 +131,9 @@ public class ToolsFragment extends Fragment {
 
         DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
 
-        data = databaseHelper.getAllTurfsList();
+
+
+        data = databaseHelper.getAllTurfsList(Integer.parseInt(session.getId()));
 
 //        System.out.println(data.get(0).toString());
 //        data.add(new TurfModel(
@@ -111,7 +146,6 @@ public class ToolsFragment extends Fragment {
         removedItems = new ArrayList<Integer>();
         adapter = new CustomAdapterTurfList(data);
         recyclerView.setAdapter(adapter);
-        return root;
     }
 
     private static class ViewOnClickListener implements View.OnClickListener {
@@ -144,7 +178,50 @@ public class ToolsFragment extends Fragment {
             TextView disciplinaNome =(TextView)parentView.findViewById(R.id.id);
             selectedId = disciplinaNome.getText().toString();
             Toast.makeText(context,selectedId,Toast.LENGTH_SHORT).show();
+            DatabaseHelper databaseHelper = new DatabaseHelper(context);
+
+            databaseHelper.deleteTurf(Integer.parseInt(selectedId));
+
+            int selectedItemId = -1;
+            for (int i = 0; i < data.size(); i++) {
+                if (data.get(i).getId()  == Integer.parseInt(selectedId)) {
+                    selectedItemId = i;
+                    break;
+                }
+            }
+            if(selectedItemId != -1)
+            {
+                Session session = new Session(context);
+                data = databaseHelper.getAllTurfsList(Integer.parseInt(session.getId()));
+                adapter = new CustomAdapterTurfList(data);
+                recyclerView.setAdapter(adapter);
+
+
+
+            }
+
+            //removeItem(v);
             //
         }
+    }
+
+    private static void removeItem(View v) {
+
+        int selectedItemPosition = recyclerView.getChildLayoutPosition(v);
+
+
+//        RecyclerView.ViewHolder viewHolder
+//                = recyclerView.findViewHolderForLayoutPosition(selectedItemPosition);
+//        TextView textViewName
+//                = (TextView) viewHolder.itemView.findViewById(R.id.textViewName);
+//        String selectedName = (String) textViewName.getText();
+//        int selectedItemId = -1;
+//        for (int i = 0; i < MyData.nameArray.length; i++) {
+//            if (selectedName.equals(MyData.nameArray[i])) {
+//                selectedItemId = MyData.id_[i];
+//            }
+//        }
+//        removedItems.add(selectedItemId);
+
     }
 }

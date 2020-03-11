@@ -63,6 +63,10 @@ public class MainActivity extends AppCompatActivity {
         {
             hideItem();
         }
+        else
+        {
+            hideItemForOwner();
+        }
 
 
 //        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this,drawer, toolbar,R.string.app_name, R.string.app_name);
@@ -133,7 +137,17 @@ public class MainActivity extends AppCompatActivity {
         Menu nav_Menu = navigationView.getMenu();
         nav_Menu.findItem(R.id.nav_gallery).setVisible(false);
         nav_Menu.findItem(R.id.nav_slideshow).setVisible(false);
+        nav_Menu.findItem(R.id.nav_tools).setVisible(false);
     }
+
+    private void hideItemForOwner()
+    {
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu nav_Menu = navigationView.getMenu();
+        nav_Menu.findItem(R.id.nav_share).setVisible(false);
+    }
+
+
 
 //    @Override
 //    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {

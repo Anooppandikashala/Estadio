@@ -388,6 +388,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userModelArrayList;
     }
 
+    public ArrayList<TurfListItem> getAllTurfsList(int owner_id) {
+        ArrayList<TurfListItem> userModelArrayList = new ArrayList<TurfListItem>();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_TURF + " WHERE owner_id = " + owner_id ;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                TurfListItem userModel = new TurfListItem();
+                userModel.setId(c.getInt(c.getColumnIndex("id")));
+                userModel.setTableId(c.getInt(c.getColumnIndex("id")));
+                userModel.setName(c.getString(c.getColumnIndex("name")));
+                userModel.setPhone(c.getString(c.getColumnIndex("phone")));
+                userModel.setView(R.drawable.ic_remove_red_eye_black_24dp);
+                userModel.setDelete(R.drawable.ic_delete_black_24dp);
+                // adding to turfs list
+                userModelArrayList.add(userModel);
+                System.out.println(userModel.toString());
+            } while (c.moveToNext());
+        }
+        c.close();
+        return userModelArrayList;
+    }
+
     public UserModel getUser(int id,boolean isOwner) {
         ArrayList<UserModel> userModelArrayList = new ArrayList<UserModel>();
 
@@ -476,6 +501,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         c.close();
         return -1;
+    }
+
+    public void deleteTurf(int id) {
+
+        // delete row in students table based on id
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //deleting from users table
+        db.delete(TABLE_TURF, " id = ?",new String[]{String.valueOf(id)});
+
+//        //deleting from users_hobby table
+//        db.delete(TABLE_USER_HOBBY, KEY_ID + " = ?", new String[]{String.valueOf(id)});
+//
+//        //deleting from users_city table
+//        db.delete(TABLE_USER_CITY, KEY_ID + " = ?",new String[]{String.valueOf(id)});
     }
 
 
