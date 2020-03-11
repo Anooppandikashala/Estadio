@@ -1,6 +1,7 @@
 package com.anoop.myprojects.estadio;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,6 +85,21 @@ public class CustomAdapterBooking extends RecyclerView.Adapter<CustomAdapterBook
         textViewTime.setText(dataSet.get(listPosition).getTime());
         textViewPhone.setText(userModel.getPhone());
         textViewName.setText(turfModel.getName());
+
+        int approve_status = dataSet.get(listPosition).getApprove();
+        if(approve_status == 0 )
+        {
+            approve.setText("Approve");
+            approve.setTextColor(Color.RED);
+        }
+        else
+        {
+            approve.setText("Approved");
+            approve.setTextColor(Color.GREEN);
+
+        }
+
+        id.setText(String.valueOf(dataSet.get(listPosition).getId()));
 
         approve.setOnClickListener(HomeFragment.myOnClickListenerApprove);
         //imageView.setImageResource(dataSet.get(listPosition).getImage());

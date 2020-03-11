@@ -195,7 +195,11 @@ public class TurfBookings extends AppCompatActivity {
 
         TurfModel turfModel = databaseHelper.getTurf(TURF_ID);
 
+        System.out.println(turfModel.toString());
+
         turfBookingModel.setOwner_id(turfModel.getOwner_id());
+
+        System.out.println(turfBookingModel.toString());
 
         long id = databaseHelper.addTurfBooking(turfBookingModel);
 

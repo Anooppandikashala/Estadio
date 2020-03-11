@@ -53,4 +53,15 @@ public class TurfModel {
     public void setOwner_id(int owner_id) {
         this.owner_id = owner_id;
     }
+
+    @Override
+    public String toString() {
+        return "TurfModel{" +
+                "name='" + name + '\'' +
+                ", version='" + version + '\'' +
+                ", id_=" + id_ +
+                ", image=" + image +
+                ", owner_id=" + owner_id +
+                '}';
+    }
 }

@@ -86,6 +86,14 @@ public class HomeFragment extends Fragment {
         DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
 
         data = databaseHelper.getAllTurfs();
+
+        if(data.size() > 0)
+        {
+            System.out.println("Owner id :"+data.get(0).toString());
+
+        }
+
+
 //        data.add(new TurfModel(
 //                "Turf",
 //                "dhjvskdjhgdshdsvd dsvkjdsvdhds",
@@ -114,17 +122,19 @@ public class HomeFragment extends Fragment {
 
         data_booking = databaseHelper.getAllTurfBookingsForOwner(ID);
 
-        data_booking = databaseHelper.getTurfBooking(5);
+//        data_booking = databaseHelper.getAllTurfBookings();
 
-        System.out.println("Owner id :"+data_booking.get(0).getOwner_id());
+        if(data_booking.size() > 0)
+            System.out.println("Owner id :"+data_booking.get(0).getOwner_id());
+
 //        data.add(new TurfModel(
 //                "Turf",
 //                "dhjvskdjhgdshdsvd dsvkjdsvdhds",
 //                1,
 //                123
 //        ));
-
-        //System.out.println(data_booking.get(0).toString());
+        if(data_booking.size() > 0)
+            System.out.println(data_booking.get(0).toString());
 
         removedItems = new ArrayList<Integer>();
         adapter = new CustomAdapterBooking(data_booking,getContext());
@@ -193,18 +203,28 @@ public class HomeFragment extends Fragment {
             TextView disciplinaNome = (TextView) parentView.findViewById(R.id.textViewName);
             TextView id_ = parentView.findViewById(R.id.turf_id);
 
-            selectedName = disciplinaNome.getText().toString();
-            Toast.makeText(context, selectedName, Toast.LENGTH_SHORT).show();
+            int turfBookingId = Integer.parseInt(id_.getText().toString());
 
-            Intent intent = new Intent(context, TurfBookings.class);
+            DatabaseHelper databaseHelper = new DatabaseHelper(context);
+            databaseHelper.approveTurfBooking(turfBookingId);
 
-            intent.putExtra("ID", id_.getText().toString());
+            ArrayList<TurfBookingModel> turfBookingModel = databaseHelper.getTurfBooking(turfBookingId);
 
-            System.out.println(id_.getText());
+            if (turfBookingModel.size() > 0)
+                System.out.println(turfBookingModel.get(0).toString());
 
-            intent.putExtra("NAME", selectedName);
-
-            context.startActivity(intent);
+//            selectedName = disciplinaNome.getText().toString();
+//            Toast.makeText(context, selectedName, Toast.LENGTH_SHORT).show();
+//
+//            Intent intent = new Intent(context, TurfBookings.class);
+//
+//            intent.putExtra("ID", id_.getText().toString());
+//
+//            System.out.println(id_.getText());
+//
+//            intent.putExtra("NAME", selectedName);
+//
+//            context.startActivity(intent);
             //
         }
     }

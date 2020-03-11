@@ -217,10 +217,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 userModel.setTurf_id(c.getInt(c.getColumnIndex("turf_id")));
                 userModel.setUser_id(c.getInt(c.getColumnIndex("user_id")));
                 userModel.setOwner_id(c.getInt(c.getColumnIndex("owner_id")));
+                userModel.setApprove(c.getInt(c.getColumnIndex("approve")));
                 // adding to turfs list
                 userModelArrayList.add(userModel);
             } while (c.moveToNext());
         }
+        c.close();
         return userModelArrayList;
     }
 
@@ -241,10 +243,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 userModel.setTurf_id(c.getInt(c.getColumnIndex("turf_id")));
                 userModel.setUser_id(c.getInt(c.getColumnIndex("user_id")));
                 userModel.setOwner_id(c.getInt(c.getColumnIndex("owner_id")));
+                userModel.setApprove(c.getInt(c.getColumnIndex("approve")));
                 // adding to turfs list
                 userModelArrayList.add(userModel);
             } while (c.moveToNext());
         }
+        c.close();
         return userModelArrayList;
     }
 
@@ -267,10 +271,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 userModel.setTurf_id(c.getInt(c.getColumnIndex("turf_id")));
                 userModel.setUser_id(c.getInt(c.getColumnIndex("user_id")));
                 userModel.setOwner_id(c.getInt(c.getColumnIndex("owner_id")));
+                userModel.setApprove(c.getInt(c.getColumnIndex("approve")));
                 // adding to turfs list
                 userModelArrayList.add(userModel);
             } while (c.moveToNext());
         }
+
+        c.close();
 
         System.out.println(userModelArrayList.size());
         return userModelArrayList;
@@ -293,10 +300,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 userModel.setTurf_id(c.getInt(c.getColumnIndex("turf_id")));
                 userModel.setUser_id(c.getInt(c.getColumnIndex("user_id")));
                 userModel.setOwner_id(c.getInt(c.getColumnIndex("owner_id")));
+                userModel.setApprove(c.getInt(c.getColumnIndex("approve")));
                 // adding to turfs list
                 userModelArrayList.add(userModel);
             } while (c.moveToNext());
         }
+
+        c.close();
+        return userModelArrayList;
+    }
+
+    public ArrayList<TurfBookingModel> getAllTurfBookings() {
+        ArrayList<TurfBookingModel> userModelArrayList = new ArrayList<TurfBookingModel>();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_TURF_BOOKING;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                TurfBookingModel userModel = new TurfBookingModel();
+                userModel.setId(c.getInt(c.getColumnIndex("id")));
+                userModel.setDate(c.getString(c.getColumnIndex("date_")));
+                userModel.setTime_from(c.getString(c.getColumnIndex("time_from")));
+                userModel.setTime_to(c.getString(c.getColumnIndex("time_to")));
+                userModel.setTurf_id(c.getInt(c.getColumnIndex("turf_id")));
+                userModel.setUser_id(c.getInt(c.getColumnIndex("user_id")));
+                userModel.setOwner_id(c.getInt(c.getColumnIndex("owner_id")));
+                userModel.setApprove(c.getInt(c.getColumnIndex("approve")));
+                // adding to turfs list
+                userModelArrayList.add(userModel);
+            } while (c.moveToNext());
+        }
+
+        c.close();
         return userModelArrayList;
     }
 
@@ -321,6 +358,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 userModelArrayList.add(userModel);
             } while (c.moveToNext());
         }
+
+        c.close();
         return userModelArrayList;
     }
 
@@ -345,7 +384,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 System.out.println(userModel.toString());
             } while (c.moveToNext());
         }
-
+        c.close();
         return userModelArrayList;
     }
 
@@ -378,6 +417,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 userModelArrayList.add(userModel);
             } while (c.moveToNext());
         }
+
+        c.close();
         return userModelArrayList.get(0);
     }
 
@@ -397,11 +438,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 userModel.setId_(c.getInt(c.getColumnIndex("id")));
                 userModel.setName(c.getString(c.getColumnIndex("name")));
                 userModel.setVersion(c.getString(c.getColumnIndex("description")));
+                userModel.setOwner_id(c.getInt(c.getColumnIndex("owner_id")));
 
                 // adding to turfs list
                 userModelArrayList.add(userModel);
             } while (c.moveToNext());
         }
+
+        c.close();
         return userModelArrayList.get(0);
     }
 
@@ -429,6 +473,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             System.out.println("id" + c.getString(c.getColumnIndex("id")));
             return Integer.parseInt(c.getString(c.getColumnIndex("id")));
         }
+
+        c.close();
         return -1;
     }
 

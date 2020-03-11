@@ -6,6 +6,7 @@ public class TurfBookingModel {
     String date;
     String time_from,time_to;
     int owner_id;
+    int approve;
 
     public TurfBookingModel() {
     }
@@ -25,6 +26,14 @@ public class TurfBookingModel {
 
     public void setOwner_id(int owner_id) {
         this.owner_id = owner_id;
+    }
+
+    public int getApprove() {
+        return approve;
+    }
+
+    public void setApprove(int approve) {
+        this.approve = approve;
     }
 
     public int getId() {
@@ -83,13 +92,15 @@ public class TurfBookingModel {
 
     @Override
     public String toString() {
-        return "TurfBookings{" +
+        return "TurfBookingModel{" +
                 "id=" + id +
                 ", user_id=" + user_id +
                 ", turf_id=" + turf_id +
                 ", date='" + date + '\'' +
                 ", time_from='" + time_from + '\'' +
                 ", time_to='" + time_to + '\'' +
+                ", owner_id=" + owner_id +
+                ", approve=" + approve +
                 '}';
     }
 }

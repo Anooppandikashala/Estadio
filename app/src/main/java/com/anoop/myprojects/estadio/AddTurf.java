@@ -54,6 +54,7 @@ public class AddTurf extends AppCompatActivity {
         if(!Name.isEmpty() && !Address.isEmpty() && !Desc.isEmpty() && !Phone.isEmpty())
         {
             databaseHelper = new DatabaseHelper(this);
+            System.out.println("Session id : "+session.getId());
             databaseHelper.addTurfs(Name,Address,Desc,Phone,Integer.parseInt(session.getId()));
             Toast.makeText(this,"Turf Added Successfully",Toast.LENGTH_SHORT).show();
             super.onBackPressed();
